@@ -180,7 +180,7 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
                 </select>
               </label>
               <span className="brand-preview" style={{ fontFamily: `'${settings.brandFont}', sans-serif` }}>
-                scentfused
+                SCENTFUSED
               </span>
 
               <label className="settings-row">
