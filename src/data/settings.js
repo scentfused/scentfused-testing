@@ -1,12 +1,12 @@
 export const FONT_OPTIONS = [
   'Audiowide',
+  'Robot Monster',
   'Royale',
   'Orbitron',
   'Bebas Neue',
   'Cinzel',
   'Metal Mania',
-  'Monoton',
-  'Robot Monster'
+  'Monoton'  
 /*  'Orange Avenue',
   'Royale',
   'Royale_Sb',
