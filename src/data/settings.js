@@ -6,14 +6,14 @@ export const FONT_OPTIONS = [
   'Metal Mania',
   'Monoton',
   'Robot Monster',
-  'Orange Avenue',
+/*  'Orange Avenue',
   'Royale',
   'Royale_Sb',
   'Royale_BOLD',
   'SS Royal',
   'Senda Display',
   'Shanoy',
-  'Soviet Style'
+  'Soviet Style' */
 ]
 
 export const defaultSettings = {
