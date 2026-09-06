@@ -113,8 +113,8 @@ button{font-family:inherit;}
   padding:18px 32px;max-width:var(--max);margin:0 auto;
 }
 .brand{
-  font-family:var(--brand-font, 'Audiowide', sans-serif);
-  font-size:22px;
+  font-family:var(--brand-font, 'Robot Monster', sans-serif);
+  font-size:30px;
   letter-spacing:2px;
   color:var(--gold-bright);
   text-transform:lowercase;
@@ -132,6 +132,7 @@ button{font-family:inherit;}
   display:flex;gap:36px;list-style:none;margin:0;padding:0;
 }
 .nav-links a{
+  font-family:var(--brand-font, 'Robot Monster', sans-serif);
   font-size:13px;letter-spacing:1.5px;text-transform:uppercase;
   color:var(--champagne);
   padding-bottom:4px;border-bottom:1px solid transparent;
