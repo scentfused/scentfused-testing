@@ -1,5 +1,6 @@
 export const FONT_OPTIONS = [
   'Audiowide',
+  'Royale',
   'Orbitron',
   'Bebas Neue',
   'Cinzel',
@@ -17,7 +18,7 @@ export const FONT_OPTIONS = [
 ]
 
 export const defaultSettings = {
-  brandFont: 'Robot Monster',
+  brandFont: 'Royale',
   accentColor: '#d4af37',
   showNewBadge: true,
   carouselAutoplay: true
