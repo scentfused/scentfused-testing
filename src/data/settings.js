@@ -1,12 +1,18 @@
 export const FONT_OPTIONS = [
-  'Robot Monster'
-  'Orange Avenue'
-  'Royale'
-  'Royale_Sb'
-  'Royale_BOLD'
-  'SS Royal'
-  'Senda Display'
-  'Shanoy'
+  'Audiowide',
+  'Orbitron',
+  'Bebas Neue',
+  'Cinzel',
+  'Metal Mania',
+  'Monoton',
+  'Robot Monster',
+  'Orange Avenue',
+  'Royale',
+  'Royale_Sb',
+  'Royale_BOLD',
+  'SS Royal',
+  'Senda Display',
+  'Shanoy',
   'Soviet Style'
 ]
 
