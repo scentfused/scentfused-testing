@@ -5,7 +5,7 @@ export const FONT_OPTIONS = [
   'Cinzel',
   'Metal Mania',
   'Monoton',
-  'Robot Monster',
+  'Robot Monster'
 /*  'Orange Avenue',
   'Royale',
   'Royale_Sb',
