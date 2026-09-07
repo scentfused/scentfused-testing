@@ -110,7 +110,7 @@ button{font-family:inherit;}
 }
 .nav-inner{
   display:flex;align-items:center;justify-content:space-between;
-  font-size:30px;
+  font-size:25px;
   padding:18px 32px;max-width:var(--max);margin:0 auto;
 }
 .brand{
