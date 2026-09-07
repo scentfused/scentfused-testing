@@ -2,11 +2,12 @@ export default function Hero() {
   return (
     <section className="hero">
       <p className="eyebrow">Perfumes · Attars · Bodycare · Candles</p>
-      <h1>A scent for every skin, every story.</h1>
+      <h1>Fused by Scent, Defined by You.</h1>
       <p className="hero-copy">
-        Scentfused is a curated house of fragrance for all genders — alcohol perfumes,
-        oil-based attars, soaps, bodywash and candles, built from the same accords so
-        your whole day carries one signature.
+        ScentFused: Where luxury meets craftsmanship. We capture the essence of the 
+        world's most iconic perfumes, delivering premium impressions and crafting our 
+        own signature scents. From exquisite fragrances to scented soaps, bodywash,
+        and candles, every product is designed to elevate your everyday moments.
       </p>
       <div className="hero-actions">
         <a href="#latest" className="btn btn-solid">Shop new arrivals</a>
