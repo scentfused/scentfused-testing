@@ -134,7 +134,7 @@ button{font-family:inherit;}
 }
 .nav-links a{
   font-family:var(--brand-font, 'Robot Monster', sans-serif);
-  font-size:23px;letter-spacing:1.5px;text-transform:uppercase;
+  font-size:18px;letter-spacing:1.5px;text-transform:uppercase;
   color:var(--champagne);
   padding-bottom:4px;border-bottom:1px solid transparent;
   transition:color .2s ease, border-color .2s ease;
