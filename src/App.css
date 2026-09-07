@@ -121,8 +121,8 @@ button{font-family:inherit;}
 }
 .brand em{
   font-style:normal;
-  font-family:'Jost',sans-serif;
-  font-size:12px;
+  font-family:'Robot Monster',sans-serif;
+  font-size:20px;
   letter-spacing:2px;
   text-transform:uppercase;
   color:var(--gold-dim);
