@@ -15,7 +15,7 @@ export default function Home({ products, settings }) {
     <div>
       <Nav />
       <main>
-        <Hero />
+      <Hero heroImage={settings.heroImage} />
         <Carousel
           products={latest}
           autoplay={settings.carouselAutoplay}
