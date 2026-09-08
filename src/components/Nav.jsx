@@ -48,6 +48,8 @@ export default function Nav() {
             </svg>
             <span>{cartCount}</span>
           </button>
+
+          
           {/*<button className="cart-btn" aria-label="Cart, 0 items">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
               <circle cx="9" cy="21" r="1" />
