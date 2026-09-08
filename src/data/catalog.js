@@ -50,5 +50,3 @@ export const latestNames = [
 ]
 export function emptyDraft() {
   return { name: '', category: 'perfumes', note: '', price: '', image: '', variants: [] }
-}
-}
