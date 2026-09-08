@@ -5,11 +5,6 @@ import { useCart } from '../context/CartContext.jsx'
 export default function Nav() {
   const [open, setOpen] = useState(false)
   const { cartCount, setIsCartOpen } = useCart()
-/*import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
-
-export default function Nav() {
-  const [open, setOpen] = useState(false) */
 
   const links = [
     { to: '/', label: 'Home', end: true },
@@ -49,16 +44,6 @@ export default function Nav() {
             <span>{cartCount}</span>
           </button>
 
-          
-          {/*<button className="cart-btn" aria-label="Cart, 0 items">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
-              <circle cx="9" cy="21" r="1" />
-              <circle cx="19" cy="21" r="1" />
-              <path d="M2.5 3h2l2.4 12.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6" />
-            </svg>
-            <span>0</span>
-          </button>
-          */}
 
           {/* Admin panel entry point — top right corner as requested */}
           <Link className="admin-btn" to="/admin">Admin</Link>
