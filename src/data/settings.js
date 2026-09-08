@@ -28,5 +28,6 @@ export const defaultSettings = {
   brandFont: 'Robot Monster',
   accentColor: '#d4af37',
   showNewBadge: true,
-  carouselAutoplay: true
+  carouselAutoplay: true,
+  heroImage: ''
 }
