@@ -55,14 +55,7 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
       image: draft.image || null,
       variants: cleanVariants
     }
-    /* i have added the new code above const payload = {
-      name: draft.name,
-      category: draft.category,
-      note: draft.note,
-      price: Number(draft.price),
-      image: draft.image || null
-    } */
-
+    
     if (editingId) {
       const { data, error } = await supabase
         .from('products')
