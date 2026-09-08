@@ -43,13 +43,25 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
     setSaving(true)
     setImageError('')
 
+    const cleanVariants = (draft.variants || [])
+      .filter((v) => v.label.trim() && v.price !== '')
+      .map((v) => ({ label: v.label.trim(), price: Number(v.price) }))
+
     const payload = {
       name: draft.name,
       category: draft.category,
       note: draft.note,
       price: Number(draft.price),
-      image: draft.image || null
+      image: draft.image || null,
+      variants: cleanVariants
     }
+    /* i have added the new code above const payload = {
+      name: draft.name,
+      category: draft.category,
+      note: draft.note,
+      price: Number(draft.price),
+      image: draft.image || null
+    } */
 
     if (editingId) {
       const { data, error } = await supabase
@@ -93,8 +105,12 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
       category: product.category,
       note: product.note,
       price: String(product.price),
-      image: product.image || ''
+      image: product.image || '',
+      variants: (product.variants || []).map((v) => ({ label: v.label, price: String(v.price) }))
     })
+      /*i have addded the new code above price: String(product.price),
+      image: product.image || ''
+    })  */
   }
 
   async function handleDelete(id) {
@@ -211,7 +227,61 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
 
             <div className="settings-group">
               <h3 className="settings-group-title">Homepage</h3>
+            
+            <div className="admin-form-wide">
+              <span className="variants-label">Variants (optional — e.g. different sizes)</span>
+              {(draft.variants || []).map((v, i) => (
+                <div className="variant-row" key={i}>
+                  <input
+                    type="text"
+                    placeholder="Label, e.g. 30ml"
+                    value={v.label}
+                    onChange={(e) => {
+                      const next = [...draft.variants]
+                      next[i] = { ...next[i], label: e.target.value }
+                      setDraft({ ...draft, variants: next })
+                    }}
+                  />
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="Price, e.g. 3800"
+                    value={v.price}
+                    onChange={(e) => {
+                      const next = [...draft.variants]
+                      next[i] = { ...next[i], price: e.target.value }
+                      setDraft({ ...draft, variants: next })
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="variant-remove"
+                    onClick={() => setDraft({ ...draft, variants: draft.variants.filter((_, j) => j !== i) })}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                className="btn btn-line"
+                onClick={() => setDraft({ ...draft, variants: [...(draft.variants || []), { label: '', price: '' }] })}
+              >
+                + Add variant
+              </button>
+            </div>
 
+            <label className="admin-form-wide">
+              Image URL
+              <input
+                type="url"
+                value={draft.image.startsWith('data:') ? '' : draft.image}
+                onChange={(e) => setDraft({ ...draft, image: e.target.value })}
+                placeholder="https://example.com/photo.jpg"
+              />
+            </label>
+              {/* 
+              i have added the new code above
               <label className="admin-form-wide">
                 Hero background photo
                 <input type="file" accept="image/*" onChange={handleHeroImageFile} disabled={heroUploading} />
@@ -227,7 +297,7 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
                   onChange={(e) => setSettings({ ...settings, heroImage: e.target.value })}
                   placeholder="https://..."
                 />
-              </label>
+              </label> */}
 
               {settings.heroImage && (
                 <div className="hero-preview">
