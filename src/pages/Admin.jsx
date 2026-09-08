@@ -13,6 +13,8 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
   const [filter, setFilter] = useState('all')
   const [imageError, setImageError] = useState('')
   const [uploading, setUploading] = useState(false)
+  const [heroUploading, setHeroUploading] = useState(false)
+  const [heroImageError, setHeroImageError] = useState('')
   const [saving, setSaving] = useState(false)
 
   const stats = useMemo(() => {
@@ -108,20 +110,34 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
     }
   }
 
-  async function handleImageFile(e) {
+   async function handleHeroImageFile(e) {
     const file = e.target.files?.[0]
     if (!file) return
-    setImageError('')
+    setHeroImageError('')
 
     if (!file.type.startsWith('image/')) {
-      setImageError('Please choose an image file.')
+      setHeroImageError('Please choose an image file.')
       return
     }
     if (file.size > MAX_IMAGE_BYTES) {
-      setImageError('Image is too large — please use a file under 5MB, or paste a URL instead.')
+      setHeroImageError('Image is too large — please use a file under 5MB, or paste a URL instead.')
       return
     }
 
+    setHeroUploading(true)
+    try {
+      const url = await uploadImageToCloudinary(file)
+      setSettings({ ...settings, heroImage: url })
+    } catch (err) {
+      console.error('Hero image upload failed:', err)
+      setHeroImageError('Upload failed — please try again, or paste a URL instead.')
+    } finally {
+      setHeroUploading(false)
+    }
+  }
+
+  async function handleImageFile(e) {
+/* image thing ends here*/
     setUploading(true)
     try {
       const url = await uploadImageToCloudinary(file)
@@ -194,7 +210,38 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
             </div>
 
             <div className="settings-group">
+              <h3 className="settings-group-title">Homepage</h3>
+
+              <label className="admin-form-wide">
+                Hero background photo
+                <input type="file" accept="image/*" onChange={handleHeroImageFile} disabled={heroUploading} />
+              </label>
+              {heroUploading && <p className="admin-form-wide muted">Uploading image…</p>}
+              {heroImageError && <p className="admin-form-error admin-form-wide">{heroImageError}</p>}
+
+              <label className="settings-row">
+                Or paste an image URL
+                <input
+                  type="text"
+                  value={settings.heroImage || ''}
+                  onChange={(e) => setSettings({ ...settings, heroImage: e.target.value })}
+                  placeholder="https://..."
+                />
+              </label>
+
+              {settings.heroImage && (
+                <div className="hero-preview">
+                  <img src={settings.heroImage} alt="Hero background preview" />
+                  <button type="button" className="btn btn-line" onClick={() => setSettings({ ...settings, heroImage: '' })}>
+                    Remove
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="settings-group">
               <h3 className="settings-group-title">Display</h3>
+              /*dis[play setting ends here new code for image background */
 
               <label className="settings-toggle">
                 <input
