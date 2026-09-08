@@ -49,5 +49,5 @@ export const latestNames = [
   'White Musk Attar'
 ]
 export function emptyDraft() {
-  return { name: '', category: 'perfumes', note: '', price: '', image: '' }
+  return { name: '', category: 'perfumes', note: '', price: '', image: '', variants: [] }
 }
