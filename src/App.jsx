@@ -86,7 +86,8 @@ export default function App() {
         brand_font: next.brandFont,
         accent_color: next.accentColor,
         show_new_badge: next.showNewBadge,
-        carousel_autoplay: next.carouselAutoplay
+        carousel_autoplay: next.carouselAutoplay,
+        hero_image: next.heroImage || null
       })
       .eq('id', 1)
     if (error) console.error('Failed to save settings:', error)
