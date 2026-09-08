@@ -8,6 +8,7 @@ import Admin from './pages/Admin.jsx'
 import AdminGate from './components/AdminGate.jsx'
 import CartDrawer from './components/CartDrawer.jsx'
 import QuickView from './components/QuickView.jsx'
+/*till here i have added the new code */
 import { CATEGORIES } from './data/catalog.js'
 import { defaultSettings } from './data/settings.js'
 import { shade } from './utils/color.js'
@@ -134,7 +135,9 @@ export default function App() {
             </AdminGate>
           }
         />
-      </Routes>
+     </Routes>
+        <CartDrawer />
+        <QuickView />
     </div>
   )
 }
