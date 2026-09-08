@@ -54,4 +54,4 @@ export function emptyDraft() {
 /*i have added the new code above
 export function emptyDraft() {
   return { name: '', category: 'perfumes', note: '', price: '', image: '' } */
-}
+
