@@ -54,7 +54,8 @@ export default function App() {
           brandFont: settingsRes.data.brand_font,
           accentColor: settingsRes.data.accent_color,
           showNewBadge: settingsRes.data.show_new_badge,
-          carouselAutoplay: settingsRes.data.carousel_autoplay
+          carouselAutoplay: settingsRes.data.carousel_autoplay,
+          heroImage: settingsRes.data.hero_image || ''
         })
       }
 
