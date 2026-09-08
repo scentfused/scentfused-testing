@@ -451,3 +451,6 @@ footer{border-top:1px solid var(--hairline);padding:70px 0 30px;}
 }
 .admin-login-form input:focus{outline:none;border-color:var(--gold-dim);}
 .admin-login-form .btn{width:100%;padding:12px;}
+/*here i have copied new code below this======*/
+.hero-preview{margin-top:10px;display:flex;align-items:center;gap:12px;}
+.hero-preview img{width:120px;height:70px;object-fit:cover;border:1px solid var(--hairline);}
