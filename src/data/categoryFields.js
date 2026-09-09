@@ -14,7 +14,8 @@ export const CATEGORY_FIELDS = {
     { key: 'concentration', label: 'Concentration', type: 'select', options: ['EDT', 'EDP', 'Parfum', 'Extrait'] },
     { key: 'lasting', label: 'Lasting power', type: 'select', options: ['Light', 'Moderate', 'Long-lasting', 'Very long-lasting'] },
     { key: 'projection', label: 'Projection', type: 'select', options: ['Intimate', 'Moderate', 'Strong', 'Beast mode'] },
-    { key: 'seasonOccasion', label: 'Season / Occasion', type: 'multiselect', options: ['Spring', 'Summer', 'Fall', 'Winter', 'Casual', 'Office', 'Evening', 'Special'] }
+    { key: 'season', label: 'Season', type: 'multiselect', options: ['Spring', 'Summer', 'Fall', 'Winter'] },
+    { key: 'occasion', label: 'Occasion', type: 'multiselect', options: ['Casual', 'Office', 'Evening', 'Special'] }
   ],
   attars: [
     { key: 'topNotes', label: 'Top notes', type: 'text' },
