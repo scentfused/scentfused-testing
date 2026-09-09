@@ -64,7 +64,7 @@
 }
 
 *{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+html{scroll-behavior:smooth:overflow-x:hidden;}
 body{
   margin:0;
   background:var(--bg);
@@ -159,6 +159,16 @@ button{font-family:inherit;}
   .nav-links.open{max-height:320px;}
   .nav-links a{display:block;padding:16px 32px;border-bottom:1px solid var(--hairline);}
   .menu-toggle{display:block;}
+}
+
+@media (max-width:640px){
+  .nav-inner{padding:14px 16px;font-size:16px;}
+  .brand{font-size:22px;letter-spacing:1.5px;}
+  .brand em{font-size:13px;margin-left:4px;}
+  .nav-right{gap:8px;}
+  .admin-btn{font-size:13px;padding:8px 12px;letter-spacing:1px;}
+  .cart-btn svg{width:18px;height:18px;}
+  .menu-toggle{width:32px;height:32px;}
 }
 
 /* ---------- Hero ---------- */
