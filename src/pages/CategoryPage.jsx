@@ -6,7 +6,10 @@ import { CATEGORIES } from '../data/catalog.js'
 
 export default function CategoryPage({ products, categoryKey }) {
   const category = CATEGORIES.find((c) => c.key === categoryKey)
-  const items = products.filter((p) => p.category === categoryKey)
+  const items = products
+    .filter((p) => p.category === categoryKey)
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name))
 
   return (
     <div>
