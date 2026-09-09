@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import CategoryPage from './pages/CategoryPage.jsx'
 import ProductPage from './pages/ProductPage.jsx'
@@ -17,6 +17,11 @@ export default function App() {
   const [settings, setSettings] = useState(defaultSettings)
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState('')
+  const location = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
 
   // Load products + settings from Supabase once, on first mount.
   // This replaces the old hardcoded `initialProducts` starting state,
