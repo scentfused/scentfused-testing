@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CATEGORIES, emptyDraft } from '../data/catalog.js'
+import { CATEGORY_FIELDS } from '../data/categoryFields.js'
 import { FONT_OPTIONS } from '../data/settings.js'
 import { supabase } from '../lib/supabaseClient.js'
 import { uploadImageToCloudinary } from '../lib/cloudinary.js'
@@ -61,7 +62,8 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
       variants: cleanVariants,
       description: draft.description || null,
       features: cleanFeatures,
-      usage: draft.usage || null
+      usage: draft.usage || null,
+      attributes: draft.attributes || {}
     }
 
     if (editingId) {
@@ -110,7 +112,8 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
       variants: (product.variants || []).map((v) => ({ label: v.label, price: String(v.price) })),
       description: product.description || '',
       features: (product.features || []).join('\n'),
-      usage: product.usage || ''
+      usage: product.usage || '',
+      attributes: product.attributes || {}
     })
   }
 
@@ -310,13 +313,67 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
               Category
               <select
                 value={draft.category}
-                onChange={(e) => setDraft({ ...draft, category: e.target.value })}
+                onChange={(e) => setDraft({ ...draft, category: e.target.value, attributes: {} })}
               >
                 {CATEGORIES.map((c) => (
                   <option key={c.key} value={c.key}>{c.label}</option>
                 ))}
               </select>
             </label>
+
+            {(CATEGORY_FIELDS[draft.category] || []).map((field) => (
+              <label key={field.key} className={field.type === 'multiselect' ? 'admin-form-wide' : ''}>
+                {field.label}
+
+                {field.type === 'text' && (
+                  <input
+                    type="text"
+                    value={draft.attributes?.[field.key] || ''}
+                    onChange={(e) =>
+                      setDraft({ ...draft, attributes: { ...draft.attributes, [field.key]: e.target.value } })
+                    }
+                  />
+                )}
+
+                {field.type === 'select' && (
+                  <select
+                    value={draft.attributes?.[field.key] || ''}
+                    onChange={(e) =>
+                      setDraft({ ...draft, attributes: { ...draft.attributes, [field.key]: e.target.value } })
+                    }
+                  >
+                    <option value="">Select…</option>
+                    {field.options.map((opt) => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                  </select>
+                )}
+
+                {field.type === 'multiselect' && (
+                  <div className="attribute-checkboxes">
+                    {field.options.map((opt) => {
+                      const current = draft.attributes?.[field.key] || []
+                      const checked = current.includes(opt)
+                      return (
+                        <label key={opt} className="attribute-checkbox">
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={(e) => {
+                              const next = e.target.checked
+                                ? [...current, opt]
+                                : current.filter((v) => v !== opt)
+                              setDraft({ ...draft, attributes: { ...draft.attributes, [field.key]: next } })
+                            }}
+                          />
+                          {opt}
+                        </label>
+                      )
+                    })}
+                  </div>
+                )}
+              </label>
+            ))}
 
             <label>
               Note (short blurb shown on product cards)
