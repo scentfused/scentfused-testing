@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import CategoryPage from './pages/CategoryPage.jsx'
+import ProductPage from './pages/ProductPage.jsx'
 import Admin from './pages/Admin.jsx'
 import AdminGate from './components/AdminGate.jsx'
 import CartDrawer from './components/CartDrawer.jsx'
@@ -118,7 +119,8 @@ export default function App() {
             path={`/${cat.key}`}
             element={<CategoryPage products={products} categoryKey={cat.key} />}
           />
-        ))}
+        ))}       
+        <Route path="/product/:id" element={<ProductPage products={products} />} />
         <Route
           path="/admin"
           element={
