@@ -603,3 +603,23 @@ footer{border-top:1px solid var(--hairline);padding:70px 0 30px;}
 .season-occasion-row{display:flex;gap:24px;flex-wrap:wrap;}
 .season-occasion-col{flex:1;min-width:200px;}
 .season-occasion-col label{margin:0;}
+
+/* ---------- Product page: flat sections, Sahare-style layout ---------- */
+.product-page-tagline{color:var(--gold-dim);font-style:italic;margin:0 0 16px;}
+.product-page-description{color:var(--champagne);line-height:1.8;margin:0 0 24px;}
+
+.product-page-flat-section{margin-bottom:24px;}
+.product-page-flat-section h3{
+  font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px;
+}
+.product-page-detail-line{margin:0 0 4px;font-size:14px;color:var(--champagne);}
+.product-page-detail-line strong{color:var(--gold-dim);font-weight:normal;}
+
+.product-page-meta-line{font-size:14px;color:var(--champagne);margin:0 0 10px;}
+.product-page-meta-line strong{color:var(--gold-dim);font-weight:normal;}
+
+.product-page-buy-row{display:flex;align-items:center;gap:16px;margin:24px 0 0;flex-wrap:wrap;}
+.product-page-buy-row .product-page-add{width:auto;flex:1;min-width:200px;margin-top:0;}
+
+.section-head-center{text-align:center;}
+.related-products{border-top:1px solid var(--hairline);}
