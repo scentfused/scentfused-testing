@@ -592,3 +592,10 @@ footer{border-top:1px solid var(--hairline);padding:70px 0 30px;}
   .admin-collapsible-head{padding:16px;font-size:14px;}
   .admin-collapsible-body{padding:0 16px 16px;}
 }
+/* ---------- Admin: category-specific attribute fields ---------- */
+.attribute-checkboxes{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;}
+.attribute-checkbox{
+  display:flex;flex-direction:row;align-items:center;gap:6px;font-size:13px;font-weight:normal;
+  text-transform:none;letter-spacing:normal;color:var(--champagne);
+}
+.attribute-checkbox input{width:auto;}
