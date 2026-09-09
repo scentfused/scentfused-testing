@@ -81,14 +81,18 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!draft.name.trim() || !draft.price) return
-
-    setSaving(true)
-    setImageError('')
 
     const cleanVariants = (draft.variants || [])
       .filter((v) => v.label.trim() && v.price !== '')
       .map((v) => ({ label: v.label.trim(), price: Number(v.price) }))
+
+    if (!draft.name.trim() || cleanVariants.length === 0) {
+      setImageError('Add a name and at least one variant with a price before saving.')
+      return
+    }
+
+    setSaving(true)
+    setImageError('')
 
     const cleanFeatures = (draft.features || '')
       .split('\n')
@@ -99,7 +103,7 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
       name: draft.name,
       category: draft.category,
       note: draft.note,
-      price: Number(draft.price),
+      price: cleanVariants[0].price,
       image: draft.image || null,
       variants: cleanVariants,
       description: draft.description || null,
@@ -149,7 +153,6 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
       name: product.name,
       category: product.category,
       note: product.note,
-      price: String(product.price),
       image: product.image || '',
       variants: (product.variants || []).map((v) => ({ label: v.label, price: String(v.price) })),
       description: product.description || '',
@@ -416,38 +419,49 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
                     />
                   </label>
 
-                  {(CATEGORY_FIELDS[draft.category] || []).map((field) => (
-                    <label key={field.key} className={field.type === 'multiselect' ? 'admin-form-wide' : ''}>
-                      {field.label}
+                  {(CATEGORY_FIELDS[draft.category] || [])
+                    .filter((field) => field.key !== 'season' && field.key !== 'occasion')
+                    .map((field) => (
+                      <label key={field.key}>
+                        {field.label}
 
-                      {field.type === 'text' && (
-                        <input
-                          type="text"
-                          value={draft.attributes?.[field.key] || ''}
-                          onChange={(e) =>
-                            setDraft({ ...draft, attributes: { ...draft.attributes, [field.key]: e.target.value } })
-                          }
-                        />
-                      )}
+                        {field.type === 'text' && (
+                          <input
+                            type="text"
+                            value={draft.attributes?.[field.key] || ''}
+                            onChange={(e) =>
+                              setDraft({ ...draft, attributes: { ...draft.attributes, [field.key]: e.target.value } })
+                            }
+                          />
+                        )}
 
-                      {field.type === 'select' && (
-                        <select
-                          value={draft.attributes?.[field.key] || ''}
-                          onChange={(e) =>
-                            setDraft({ ...draft, attributes: { ...draft.attributes, [field.key]: e.target.value } })
-                          }
-                        >
-                          <option value="">Select…</option>
-                          {field.options.map((opt) => (
-                            <option key={opt} value={opt}>{opt}</option>
-                          ))}
-                        </select>
-                      )}
+                        {field.type === 'select' && (
+                          <select
+                            value={draft.attributes?.[field.key] || ''}
+                            onChange={(e) =>
+                              setDraft({ ...draft, attributes: { ...draft.attributes, [field.key]: e.target.value } })
+                            }
+                          >
+                            <option value="">Select…</option>
+                            {field.options.map((opt) => (
+                              <option key={opt} value={opt}>{opt}</option>
+                            ))}
+                          </select>
+                        )}
+                      </label>
+                    ))}
 
-                      {field.type === 'multiselect' && (
+                  {(() => {
+                    const fields = CATEGORY_FIELDS[draft.category] || []
+                    const seasonField = fields.find((f) => f.key === 'season')
+                    const occasionField = fields.find((f) => f.key === 'occasion')
+                    if (!seasonField && !occasionField) return null
+
+                    function renderCheckboxes(field) {
+                      const current = draft.attributes?.[field.key] || []
+                      return (
                         <div className="attribute-checkboxes">
                           {field.options.map((opt) => {
-                            const current = draft.attributes?.[field.key] || []
                             const checked = current.includes(opt)
                             return (
                               <label key={opt} className="attribute-checkbox">
@@ -466,11 +480,28 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
                             )
                           })}
                         </div>
-                      )}
-                    </label>
-                  ))}
+                      )
+                    }
 
-                  <label>
+                    return (
+                      <div className="admin-form-wide season-occasion-row">
+                        {seasonField && (
+                          <div className="season-occasion-col">
+                            <span className="variants-label">{seasonField.label}</span>
+                            {renderCheckboxes(seasonField)}
+                          </div>
+                        )}
+                        {occasionField && (
+                          <div className="season-occasion-col">
+                            <span className="variants-label">{occasionField.label}</span>
+                            {renderCheckboxes(occasionField)}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })()}
+
+                  <label className="admin-form-wide">
                     Note (short blurb shown on product cards)
                     <input
                       type="text"
@@ -480,50 +511,8 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
                     />
                   </label>
 
-                  <label>
-                    Price (Rs.)
-                    <input
-                      type="number"
-                      min="0"
-                      value={draft.price}
-                      onChange={(e) => setDraft({ ...draft, price: e.target.value })}
-                      placeholder="e.g. 6500"
-                      required
-                    />
-                  </label>
-
-                  <label className="admin-form-wide">
-                    Description (shown on the product's own page)
-                    <textarea
-                      rows="4"
-                      value={draft.description || ''}
-                      onChange={(e) => setDraft({ ...draft, description: e.target.value })}
-                      placeholder="A longer description of the product — story, inspiration, what makes it special..."
-                    />
-                  </label>
-
-                  <label className="admin-form-wide">
-                    Features (one per line)
-                    <textarea
-                      rows="4"
-                      value={draft.features || ''}
-                      onChange={(e) => setDraft({ ...draft, features: e.target.value })}
-                      placeholder={'Long-lasting 8+ hour wear\nAlcohol-free formula\nHandcrafted in small batches'}
-                    />
-                  </label>
-
-                  <label className="admin-form-wide">
-                    Usage / how to use
-                    <textarea
-                      rows="3"
-                      value={draft.usage || ''}
-                      onChange={(e) => setDraft({ ...draft, usage: e.target.value })}
-                      placeholder="e.g. Apply to pulse points after showering for best longevity."
-                    />
-                  </label>
-
                   <div className="admin-form-wide">
-                    <span className="variants-label">Variants (optional — e.g. different sizes)</span>
+                    <span className="variants-label">Variants — size and price (at least one required)</span>
                     {(draft.variants || []).map((v, i) => (
                       <div className="variant-row" key={i}>
                         <input
@@ -564,6 +553,36 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
                       + Add variant
                     </button>
                   </div>
+
+                  <label className="admin-form-wide">
+                    Description (shown on the product's own page)
+                    <textarea
+                      rows="4"
+                      value={draft.description || ''}
+                      onChange={(e) => setDraft({ ...draft, description: e.target.value })}
+                      placeholder="A longer description of the product — story, inspiration, what makes it special..."
+                    />
+                  </label>
+
+                  <label className="admin-form-wide">
+                    Features (one per line)
+                    <textarea
+                      rows="4"
+                      value={draft.features || ''}
+                      onChange={(e) => setDraft({ ...draft, features: e.target.value })}
+                      placeholder={'Long-lasting 8+ hour wear\nAlcohol-free formula\nHandcrafted in small batches'}
+                    />
+                  </label>
+
+                  <label className="admin-form-wide">
+                    Usage / how to use
+                    <textarea
+                      rows="3"
+                      value={draft.usage || ''}
+                      onChange={(e) => setDraft({ ...draft, usage: e.target.value })}
+                      placeholder="e.g. Apply to pulse points after showering for best longevity."
+                    />
+                  </label>
 
                   <label className="admin-form-wide">
                     Image URL
