@@ -599,7 +599,7 @@ footer{border-top:1px solid var(--hairline);padding:70px 0 30px;}
   display:flex;flex-direction:row;align-items:center;gap:6px;font-size:13px;font-weight:normal;
   text-transform:none;letter-spacing:normal;color:var(--champagne);
 }
-.attribute-checkbox input{width:auto;}
-/* ---------- Admin: Season/Occasion side-by-side ---------- */
-.season-occasion-row{display:flex;gap:32px;flex-wrap:wrap;}
-.season-occasion-col{flex:1;min-width:220px;}
+.attribute-checkbox input{width:auto;}/* ---------- Admin: Season/Occasion/Note side-by-side ---------- */
+.season-occasion-row{display:flex;gap:24px;flex-wrap:wrap;}
+.season-occasion-col{flex:1;min-width:200px;}
+.season-occasion-col label{margin:0;}
