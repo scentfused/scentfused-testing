@@ -47,15 +47,23 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
       .filter((v) => v.label.trim() && v.price !== '')
       .map((v) => ({ label: v.label.trim(), price: Number(v.price) }))
 
+    const cleanFeatures = (draft.features || '')
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+
     const payload = {
       name: draft.name,
       category: draft.category,
       note: draft.note,
       price: Number(draft.price),
       image: draft.image || null,
-      variants: cleanVariants
+      variants: cleanVariants,
+      description: draft.description || null,
+      features: cleanFeatures,
+      usage: draft.usage || null
     }
-    
+
     if (editingId) {
       const { data, error } = await supabase
         .from('products')
@@ -99,11 +107,11 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
       note: product.note,
       price: String(product.price),
       image: product.image || '',
-      variants: (product.variants || []).map((v) => ({ label: v.label, price: String(v.price) }))
+      variants: (product.variants || []).map((v) => ({ label: v.label, price: String(v.price) })),
+      description: product.description || '',
+      features: (product.features || []).join('\n'),
+      usage: product.usage || ''
     })
-      /*i have addded the new code above price: String(product.price),
-      image: product.image || ''
-    })  */
   }
 
   async function handleDelete(id) {
@@ -119,7 +127,7 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
     }
   }
 
-   async function handleHeroImageFile(e) {
+  async function handleHeroImageFile(e) {
     const file = e.target.files?.[0]
     if (!file) return
     setHeroImageError('')
@@ -146,7 +154,19 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
   }
 
   async function handleImageFile(e) {
-/* image thing ends here*/
+    const file = e.target.files?.[0]
+    if (!file) return
+    setImageError('')
+
+    if (!file.type.startsWith('image/')) {
+      setImageError('Please choose an image file.')
+      return
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      setImageError('Image is too large — please use a file under 5MB, or paste a URL instead.')
+      return
+    }
+
     setUploading(true)
     try {
       const url = await uploadImageToCloudinary(file)
@@ -163,7 +183,6 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
     <div className="admin">
       <header className="admin-topbar">
         <span className="brand">scentfused <em>admin</em></span>
-        {/* Top-right button back to the storefront */}
         <Link className="admin-btn" to="/">View site</Link>
       </header>
 
@@ -220,61 +239,7 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
 
             <div className="settings-group">
               <h3 className="settings-group-title">Homepage</h3>
-            
-            <div className="admin-form-wide">
-              <span className="variants-label">Variants (optional — e.g. different sizes)</span>
-              {(draft.variants || []).map((v, i) => (
-                <div className="variant-row" key={i}>
-                  <input
-                    type="text"
-                    placeholder="Label, e.g. 30ml"
-                    value={v.label}
-                    onChange={(e) => {
-                      const next = [...draft.variants]
-                      next[i] = { ...next[i], label: e.target.value }
-                      setDraft({ ...draft, variants: next })
-                    }}
-                  />
-                  <input
-                    type="number"
-                    min="0"
-                    placeholder="Price, e.g. 3800"
-                    value={v.price}
-                    onChange={(e) => {
-                      const next = [...draft.variants]
-                      next[i] = { ...next[i], price: e.target.value }
-                      setDraft({ ...draft, variants: next })
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className="variant-remove"
-                    onClick={() => setDraft({ ...draft, variants: draft.variants.filter((_, j) => j !== i) })}
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              <button
-                type="button"
-                className="btn btn-line"
-                onClick={() => setDraft({ ...draft, variants: [...(draft.variants || []), { label: '', price: '' }] })}
-              >
-                + Add variant
-              </button>
-            </div>
 
-            <label className="admin-form-wide">
-              Image URL
-              <input
-                type="url"
-                value={draft.image.startsWith('data:') ? '' : draft.image}
-                onChange={(e) => setDraft({ ...draft, image: e.target.value })}
-                placeholder="https://example.com/photo.jpg"
-              />
-            </label>
-              {/* 
-              i have added the new code above
               <label className="admin-form-wide">
                 Hero background photo
                 <input type="file" accept="image/*" onChange={handleHeroImageFile} disabled={heroUploading} />
@@ -290,7 +255,7 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
                   onChange={(e) => setSettings({ ...settings, heroImage: e.target.value })}
                   placeholder="https://..."
                 />
-              </label> */}
+              </label>
 
               {settings.heroImage && (
                 <div className="hero-preview">
@@ -304,7 +269,6 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
 
             <div className="settings-group">
               <h3 className="settings-group-title">Display</h3>
-              /*dis[play setting ends here new code for image background */
 
               <label className="settings-toggle">
                 <input
@@ -355,7 +319,7 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
             </label>
 
             <label>
-              Note
+              Note (short blurb shown on product cards)
               <input
                 type="text"
                 value={draft.note}
@@ -375,6 +339,79 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
                 required
               />
             </label>
+
+            <label className="admin-form-wide">
+              Description (shown on the product's own page)
+              <textarea
+                rows="4"
+                value={draft.description || ''}
+                onChange={(e) => setDraft({ ...draft, description: e.target.value })}
+                placeholder="A longer description of the product — story, inspiration, what makes it special..."
+              />
+            </label>
+
+            <label className="admin-form-wide">
+              Features (one per line)
+              <textarea
+                rows="4"
+                value={draft.features || ''}
+                onChange={(e) => setDraft({ ...draft, features: e.target.value })}
+                placeholder={'Long-lasting 8+ hour wear\nAlcohol-free formula\nHandcrafted in small batches'}
+              />
+            </label>
+
+            <label className="admin-form-wide">
+              Usage / how to use
+              <textarea
+                rows="3"
+                value={draft.usage || ''}
+                onChange={(e) => setDraft({ ...draft, usage: e.target.value })}
+                placeholder="e.g. Apply to pulse points after showering for best longevity."
+              />
+            </label>
+
+            <div className="admin-form-wide">
+              <span className="variants-label">Variants (optional — e.g. different sizes)</span>
+              {(draft.variants || []).map((v, i) => (
+                <div className="variant-row" key={i}>
+                  <input
+                    type="text"
+                    placeholder="Label, e.g. 30ml"
+                    value={v.label}
+                    onChange={(e) => {
+                      const next = [...draft.variants]
+                      next[i] = { ...next[i], label: e.target.value }
+                      setDraft({ ...draft, variants: next })
+                    }}
+                  />
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="Price, e.g. 3800"
+                    value={v.price}
+                    onChange={(e) => {
+                      const next = [...draft.variants]
+                      next[i] = { ...next[i], price: e.target.value }
+                      setDraft({ ...draft, variants: next })
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="variant-remove"
+                    onClick={() => setDraft({ ...draft, variants: draft.variants.filter((_, j) => j !== i) })}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                className="btn btn-line"
+                onClick={() => setDraft({ ...draft, variants: [...(draft.variants || []), { label: '', price: '' }] })}
+              >
+                + Add variant
+              </button>
+            </div>
 
             <label className="admin-form-wide">
               Image URL
