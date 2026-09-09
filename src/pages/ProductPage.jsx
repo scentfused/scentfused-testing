@@ -34,6 +34,7 @@ export default function ProductPage({ products }) {
   const variants = product.variants || []
   const activeVariant = selectedVariant || variants[0] || null
   const displayPrice = activeVariant ? activeVariant.price : product.price
+  const showSale = Boolean(product.sale_price) && displayPrice === product.price
   const categoryLabel = CATEGORIES.find((c) => c.key === product.category)?.label
 
   const detailFields = (CATEGORY_FIELDS[product.category] || []).filter((field) => {
@@ -62,7 +63,16 @@ export default function ProductPage({ products }) {
 
         <div className="product-page-info">
           <h1>{product.name}</h1>
-          <p className="product-page-price">Rs. {Number(displayPrice).toLocaleString()}</p>
+          <p className="product-page-price">
+            {showSale ? (
+              <>
+                <span className="price-was">Rs. {Number(displayPrice).toLocaleString()}</span>
+                <span className="price-sale">Rs. {Number(product.sale_price).toLocaleString()}</span>
+              </>
+            ) : (
+              <>Rs. {Number(displayPrice).toLocaleString()}</>
+            )}
+          </p>
 
           {product.note && <p className="product-page-tagline">{product.note}</p>}
 
