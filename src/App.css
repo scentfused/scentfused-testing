@@ -391,10 +391,11 @@ footer{border-top:1px solid var(--hairline);padding:70px 0 30px;}
   display:flex;flex-direction:column;gap:8px;font-size:12px;letter-spacing:.5px;
   text-transform:uppercase;color:var(--gold-dim);
 }
-.admin-form input, .admin-form select{
+.admin-form input, .admin-form select, .admin-form textarea{
   background:#000;border:1px solid var(--hairline);color:var(--champagne);
   padding:11px 12px;font-family:'Jost',sans-serif;font-size:14px;text-transform:none;letter-spacing:normal;
 }
+.admin-form textarea{width:100%;resize:vertical;}
 .admin-form input[type="file"]{padding:9px 12px 9px 0;}
 .admin-form input:focus, .admin-form select:focus{outline:none;border-color:var(--gold-dim);}
 .admin-form-error{color:#e8987c;font-size:13px;text-transform:none;letter-spacing:normal;}
@@ -599,3 +600,6 @@ footer{border-top:1px solid var(--hairline);padding:70px 0 30px;}
   text-transform:none;letter-spacing:normal;color:var(--champagne);
 }
 .attribute-checkbox input{width:auto;}
+/* ---------- Admin: Season/Occasion side-by-side ---------- */
+.season-occasion-row{display:flex;gap:32px;flex-wrap:wrap;}
+.season-occasion-col{flex:1;min-width:220px;}
