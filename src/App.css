@@ -667,3 +667,12 @@ footer{border-top:1px solid var(--hairline);padding:70px 0 30px;}
   .product-page{flex-direction:column;padding:24px 16px;gap:24px;}
   .product-page-image{width:100%;min-height:320px;}
 }
+/* ---------- Sale price display ---------- */
+.price-was{
+  text-decoration:line-through;color:var(--gold-dim);font-size:0.85em;margin-right:8px;
+}
+.price-sale{color:#e8987c;}
+
+/* ---------- Admin: SKU + Sale price row ---------- */
+.sku-sale-row{display:flex;gap:24px;flex-wrap:wrap;}
+.sku-sale-row label{flex:1;min-width:200px;}
