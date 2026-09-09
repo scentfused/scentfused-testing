@@ -10,63 +10,55 @@
 }
 @font-face {
   font-family: 'Robot Monster';
-  src: url('/fonts/RobotMonster.ttf') format('truetype');
+  src: url('https://res.cloudinary.com/nqotqftf/raw/upload/RobotMonster.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
-
 @font-face {
   font-family: 'Orange Avenue';
-  src: url('/fonts/OrangeAvenue-Regular.otf') format('opentype');
+  src: url('https://res.cloudinary.com/nqotqftf/raw/upload/OrangeAvenue-Regular.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
-
 @font-face {
   font-family: 'Royale';
-  src: url('/fonts/ROYALE.otf') format('opentype');
+  src: url('https://res.cloudinary.com/nqotqftf/raw/upload/ROYALE.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
 }
-
 @font-face {
   font-family: 'Royale';
-  src: url('/fonts/ROYALESemibold.ttf') format('truetype');
+  src: url('https://res.cloudinary.com/nqotqftf/raw/upload/ROYALESemibold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
-
 @font-face {
   font-family: 'Royale';
-  src: url('/fonts/ROYALEBold.otf') format('opentype');
+  src: url('https://res.cloudinary.com/nqotqftf/raw/upload/ROYALEBold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
 }
-
 @font-face {
   font-family: 'SS Royal';
-  src: url('/fonts/SS_Royal.otf') format('opentype');
+  src: url('https://res.cloudinary.com/nqotqftf/raw/upload/SS_Royal.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
-
 @font-face {
   font-family: 'Senda Display';
-  src: url('/fonts/SendaDisplay.otf') format('opentype');
+  src: url('https://res.cloudinary.com/nqotqftf/raw/upload/SendaDisplay.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
-
 @font-face {
   font-family: 'Shanoy';
-  src: url('/fonts/Shanoy-regular.otf') format('opentype');
+  src: url('https://res.cloudinary.com/nqotqftf/raw/upload/Shanoy-regular.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
-
 @font-face {
   font-family: 'Soviet Style';
-  src: url('/fonts/SovietStyle-Regular.ttf') format('truetype');
+  src: url('https://res.cloudinary.com/nqotqftf/raw/upload/SovietStyle-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
