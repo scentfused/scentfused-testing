@@ -18,7 +18,7 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
   const [saving, setSaving] = useState(false)
 
   // Which top-level cards are expanded. Each toggles independently.
-  const [openSections, setOpenSections] = useState({ settings: false, product: true, table: true })
+  const [openSections, setOpenSections] = useState({ settings: false, product: false, table: false })
   function toggleSection(key) {
     setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }))
   }
@@ -55,12 +55,15 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
     return Array.from(set)
   }, [products])
 
-  const visible = products.filter((p) => {
-    if (filterName && !p.name.toLowerCase().includes(filterName.toLowerCase())) return false
-    if (filterCategory !== 'all' && p.category !== filterCategory) return false
-    if (filterVariant !== 'all' && !(p.variants || []).some((v) => v.label === filterVariant)) return false
-    return true
-  })
+  const visible = products
+    .filter((p) => {
+      if (filterName && !p.name.toLowerCase().includes(filterName.toLowerCase())) return false
+      if (filterCategory !== 'all' && p.category !== filterCategory) return false
+      if (filterVariant !== 'all' && !(p.variants || []).some((v) => v.label === filterVariant)) return false
+      return true
+    })
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name))
 
   const stats = useMemo(() => {
     const total = products.length
@@ -455,7 +458,6 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
                     const fields = CATEGORY_FIELDS[draft.category] || []
                     const seasonField = fields.find((f) => f.key === 'season')
                     const occasionField = fields.find((f) => f.key === 'occasion')
-                    if (!seasonField && !occasionField) return null
 
                     function renderCheckboxes(field) {
                       const current = draft.attributes?.[field.key] || []
@@ -497,19 +499,20 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
                             {renderCheckboxes(occasionField)}
                           </div>
                         )}
+                        <div className="season-occasion-col">
+                          <label>
+                            Note (short blurb shown on product cards)
+                            <input
+                              type="text"
+                              value={draft.note}
+                              onChange={(e) => setDraft({ ...draft, note: e.target.value })}
+                              placeholder="e.g. Smoked oud, dark amber, leather"
+                            />
+                          </label>
+                        </div>
                       </div>
                     )
                   })()}
-
-                  <label className="admin-form-wide">
-                    Note (short blurb shown on product cards)
-                    <input
-                      type="text"
-                      value={draft.note}
-                      onChange={(e) => setDraft({ ...draft, note: e.target.value })}
-                      placeholder="e.g. Smoked oud, dark amber, leather"
-                    />
-                  </label>
 
                   <div className="admin-form-wide">
                     <span className="variants-label">Variants — size and price (at least one required)</span>
