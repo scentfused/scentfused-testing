@@ -1,57 +1,89 @@
-import { useCart } from '../context/CartContext.jsx'
+import { createContext, useContext, useEffect, useState } from 'react'
 
-export default function CartDrawer() {
-  const { items, isCartOpen, setIsCartOpen, removeFromCart, updateQty, cartTotal } = useCart()
+const CartContext = createContext(null)
+const STORAGE_KEY = 'scentfused-cart'
 
-  if (!isCartOpen) return null
+function loadCart() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch {
+    return []
+  }
+}
+
+export function CartProvider({ children }) {
+  const [items, setItems] = useState(loadCart)
+  const [isCartOpen, setIsCartOpen] = useState(false)
+  const [quickViewProduct, setQuickViewProduct] = useState(null)
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+  }, [items])
+
+  function addToCart(product, variant, qty = 1) {
+    const variantLabel = variant ? variant.label : null
+    const price = variant ? variant.price : product.price
+    const itemId = `${product.id}-${variantLabel || 'base'}`
+
+    setItems((prev) => {
+      const existing = prev.find((i) => i.itemId === itemId)
+      if (existing) {
+        return prev.map((i) => (i.itemId === itemId ? { ...i, qty: i.qty + qty } : i))
+      }
+      return [
+        ...prev,
+        {
+          itemId,
+          productId: product.id,
+          name: product.name,
+          image: product.image,
+          variantLabel,
+          price,
+          qty
+        }
+      ]
+    })
+    setIsCartOpen(true)
+  }
+
+  function removeFromCart(itemId) {
+    setItems((prev) => prev.filter((i) => i.itemId !== itemId))
+  }
+
+  function updateQty(itemId, delta) {
+    setItems((prev) =>
+      prev
+        .map((i) => (i.itemId === itemId ? { ...i, qty: i.qty + delta } : i))
+        .filter((i) => i.qty > 0)
+    )
+  }
+
+  const cartCount = items.reduce((sum, i) => sum + i.qty, 0)
+  const cartTotal = items.reduce((sum, i) => sum + i.qty * i.price, 0)
 
   return (
-    <div className="cart-overlay" onClick={() => setIsCartOpen(false)}>
-      <div className="cart-drawer" onClick={(e) => e.stopPropagation()}>
-        <div className="cart-drawer-head">
-          <h3>Your bag</h3>
-          <button className="cart-close" onClick={() => setIsCartOpen(false)}>&times;</button>
-        </div>
-
-        {items.length === 0 ? (
-          <p className="cart-empty">Your bag is empty.</p>
-        ) : (
-          <>
-            <div className="cart-items">
-              {items.map((item) => (
-                <div className="cart-item" key={item.itemId}>
-                  <div className="cart-item-thumb">
-                    {item.image ? <img src={item.image} alt={item.name} /> : null}
-                  </div>
-                  <div className="cart-item-info">
-                    <h4>{item.name}</h4>
-                    {item.variantLabel && <p className="cart-item-variant">{item.variantLabel}</p>}
-                    <div className="cart-item-qty">
-                      <button onClick={() => updateQty(item.itemId, -1)}>&minus;</button>
-                      <span>{item.qty}</span>
-                      <button onClick={() => updateQty(item.itemId, 1)}>+</button>
-                    </div>
-                  </div>
-                  <div className="cart-item-right">
-                    <span className="cart-item-price">Rs. {(item.price * item.qty).toLocaleString()}</span>
-                    <button className="cart-item-remove" onClick={() => removeFromCart(item.itemId)}>Remove</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="cart-drawer-foot">
-              <div className="cart-subtotal">
-                <span>Subtotal</span>
-                <span>Rs. {cartTotal.toLocaleString()}</span>
-              </div>
-              <button className="btn btn-solid cart-checkout" onClick={() => alert('Checkout coming soon!')}>
-                Checkout
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+    <CartContext.Provider
+      value={{
+        items,
+        addToCart,
+        removeFromCart,
+        updateQty,
+        cartCount,
+        cartTotal,
+        isCartOpen,
+        setIsCartOpen,
+        quickViewProduct,
+        setQuickViewProduct
+      }}
+    >
+      {children}
+    </CartContext.Provider>
   )
+}
+
+export function useCart() {
+  const ctx = useContext(CartContext)
+  if (!ctx) throw new Error('useCart must be used within a CartProvider')
+  return ctx
 }
