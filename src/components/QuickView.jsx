@@ -1,44 +1,71 @@
-import { useCart } from "../context/CartContext";
+import { useState } from 'react'
+import { useCart } from '../context/CartContext.jsx'
+import Icon from './Icon.jsx'
 
-const QuickView = ({ product, onClose }) => {
-  if (!product) {
-    return null;
+export default function QuickView() {
+  const { quickViewProduct, setQuickViewProduct, addToCart } = useCart()
+  const [selectedVariant, setSelectedVariant] = useState(null)
+  const [qty, setQty] = useState(1)
+
+  if (!quickViewProduct) return null
+
+  const product = quickViewProduct
+  const variants = product.variants || []
+  const activeVariant = selectedVariant || variants[0] || null
+  const displayPrice = activeVariant ? activeVariant.price : product.price
+
+  function close() {
+    setQuickViewProduct(null)
+    setSelectedVariant(null)
+    setQty(1)
   }
 
-  const { addToCart } = useCart();
-
-  const handleAddToCart = () => {
-    addToCart(product);
-  };
+  function handleAdd() {
+    addToCart(product, activeVariant, qty)
+    close()
+  }
 
   return (
-    <div className="quick-view">
-      <div className="quick-view-content">
-        <button onClick={onClose} className="quick-view-close">
-          ×
-        </button>
+    <div className="quickview-overlay" onClick={close}>
+      <div className="quickview-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="quickview-close" onClick={close}>&times;</button>
 
-        {product.image && (
-          <img
-            src={product.image}
-            alt={product.name || "Product"}
-          />
-        )}
+        <div className="quickview-image">
+          {product.image ? <img src={product.image} alt={product.name} /> : <Icon category={product.category} />}
+        </div>
 
-        <h2>{product.name || "Product"}</h2>
+        <div className="quickview-info">
+          <h3>{product.name}</h3>
+          <p className="note">{product.note}</p>
+          <p className="price">Rs. {Number(displayPrice).toLocaleString()}</p>
 
-        {product.price && <p>{product.price}</p>}
+          {variants.length > 0 && (
+            <div className="quickview-variants">
+              <span className="quickview-variants-label">Size</span>
+              <div className="quickview-variant-options">
+                {variants.map((v) => (
+                  <button
+                    key={v.label}
+                    type="button"
+                    className={`variant-chip ${activeVariant?.label === v.label ? 'active' : ''}`}
+                    onClick={() => setSelectedVariant(v)}
+                  >
+                    {v.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
-        {product.description && (
-          <p>{product.description}</p>
-        )}
+          <div className="quickview-qty">
+            <button onClick={() => setQty((q) => Math.max(1, q - 1))}>&minus;</button>
+            <span>{qty}</span>
+            <button onClick={() => setQty((q) => q + 1)}>+</button>
+          </div>
 
-        <button onClick={handleAddToCart}>
-          Add to Cart
-        </button>
+          <button className="btn btn-solid quickview-add" onClick={handleAdd}>Add to bag</button>
+        </div>
       </div>
     </div>
-  );
-};
-
-export default QuickView;
+  )
+}
