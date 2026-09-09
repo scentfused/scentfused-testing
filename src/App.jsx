@@ -58,7 +58,8 @@ export default function App() {
           accentColor: settingsRes.data.accent_color,
           showNewBadge: settingsRes.data.show_new_badge,
           carouselAutoplay: settingsRes.data.carousel_autoplay,
-          heroImage: settingsRes.data.hero_image || ''
+          heroImage: settingsRes.data.hero_image || '',
+          carouselProductIds: settingsRes.data.carousel_product_ids || []
         })
       }
 
@@ -90,7 +91,8 @@ export default function App() {
         accent_color: next.accentColor,
         show_new_badge: next.showNewBadge,
         carousel_autoplay: next.carouselAutoplay,
-        hero_image: next.heroImage || null
+        hero_image: next.heroImage || null,
+        carousel_product_ids: next.carouselProductIds || []
       })
       .eq('id', 1)
     if (error) console.error('Failed to save settings:', error)
