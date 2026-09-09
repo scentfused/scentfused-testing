@@ -555,3 +555,40 @@ footer{border-top:1px solid var(--hairline);padding:70px 0 30px;}
 .product-page-features li{margin-bottom:6px;}
 .card-link{color:inherit;text-decoration:none;display:block;}
 .card-link:hover{color:inherit;}
+/* ---------- Admin: collapsible accordion cards ---------- */
+.admin-accordion{display:flex;flex-direction:column;gap:16px;}
+.admin-collapsible{
+  border:1px solid var(--hairline);background:#0a0a0a;
+}
+.admin-collapsible-head{
+  width:100%;display:flex;justify-content:space-between;align-items:center;
+  background:none;border:none;color:var(--gold-bright);cursor:pointer;
+  padding:20px 24px;font-size:16px;letter-spacing:1px;text-transform:uppercase;font-family:inherit;
+}
+.admin-collapsible-arrow{transition:transform .2s ease;color:var(--gold-dim);}
+.admin-collapsible.open .admin-collapsible-arrow{transform:rotate(180deg);}
+.admin-collapsible-body{padding:0 24px 24px;border-top:1px solid var(--hairline);}
+
+/* ---------- Admin: carousel product picker ---------- */
+.settings-hint{font-size:12px;margin:-4px 0 12px;}
+.carousel-picker{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.carousel-picker select{flex:1;min-width:140px;}
+.carousel-picked-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+.carousel-picked-list li{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 12px;border:1px solid var(--hairline);font-size:13px;
+}
+.carousel-picked-list button{
+  background:none;border:none;color:var(--gold-dim);font-size:11px;
+  text-decoration:underline;cursor:pointer;padding:0;
+}
+
+/* ---------- Admin: product table filters ---------- */
+.admin-table-filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.admin-table-filters input,
+.admin-table-filters select{flex:1;min-width:160px;}
+
+@media (max-width:640px){
+  .admin-collapsible-head{padding:16px;font-size:14px;}
+  .admin-collapsible-body{padding:0 16px 16px;}
+}
