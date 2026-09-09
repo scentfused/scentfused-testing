@@ -16,6 +16,8 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
   const [heroUploading, setHeroUploading] = useState(false)
   const [heroImageError, setHeroImageError] = useState('')
   const [saving, setSaving] = useState(false)
+  const [originalProduct, setOriginalProduct] = useState(null)
+  const [pendingUpdate, setPendingUpdate] = useState(null)
 
   // Which top-level cards are expanded. Each toggles independently.
   const [openSections, setOpenSections] = useState({ settings: false, product: false, table: false })
@@ -80,6 +82,60 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
     setDraft(emptyDraft())
     setEditingId(null)
     setImageError('')
+    setOriginalProduct(null)
+    setPendingUpdate(null)
+  }
+
+  function buildChanges(original, payload) {
+    const changes = []
+    const fieldLabels = {
+      name: 'Name',
+      category: 'Category',
+      note: 'Note',
+      price: 'Price',
+      sale_price: 'Sale price',
+      sku: 'SKU',
+      description: 'Description',
+      usage: 'Usage',
+      image: 'Image'
+    }
+
+    Object.keys(fieldLabels).forEach((key) => {
+      const oldVal = original[key] ?? ''
+      const newVal = payload[key] ?? ''
+      if (String(oldVal) !== String(newVal)) {
+        changes.push({ label: fieldLabels[key], from: String(oldVal) || '—', to: String(newVal) || '—' })
+      }
+    })
+
+    const oldFeatures = (original.features || []).join(', ')
+    const newFeatures = (payload.features || []).join(', ')
+    if (oldFeatures !== newFeatures) {
+      changes.push({ label: 'Features', from: oldFeatures || '—', to: newFeatures || '—' })
+    }
+
+    const oldVariants = (original.variants || []).map((v) => `${v.label}: Rs.${v.price}`).join(', ')
+    const newVariants = (payload.variants || []).map((v) => `${v.label}: Rs.${v.price}`).join(', ')
+    if (oldVariants !== newVariants) {
+      changes.push({ label: 'Variants', from: oldVariants || '—', to: newVariants || '—' })
+    }
+
+    const allAttrKeys = new Set([
+      ...Object.keys(original.attributes || {}),
+      ...Object.keys(payload.attributes || {})
+    ])
+    allAttrKeys.forEach((key) => {
+      const oldVal = original.attributes?.[key]
+      const newVal = payload.attributes?.[key]
+      const oldDisplay = Array.isArray(oldVal) ? oldVal.join(', ') : (oldVal || '')
+      const newDisplay = Array.isArray(newVal) ? newVal.join(', ') : (newVal || '')
+      if (oldDisplay !== newDisplay) {
+        const fieldDef = (CATEGORY_FIELDS[payload.category] || []).find((f) => f.key === key)
+        changes.push({ label: fieldDef?.label || key, from: oldDisplay || '—', to: newDisplay || '—' })
+      }
+    })
+
+    return changes
   }
 
   async function handleSubmit(e) {
@@ -94,7 +150,6 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
       return
     }
 
-    setSaving(true)
     setImageError('')
 
     const cleanFeatures = (draft.features || '')
@@ -107,6 +162,8 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
       category: draft.category,
       note: draft.note,
       price: cleanVariants[0].price,
+      sale_price: draft.salePrice ? Number(draft.salePrice) : null,
+      sku: draft.sku || null,
       image: draft.image || null,
       variants: cleanVariants,
       description: draft.description || null,
@@ -116,41 +173,58 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
     }
 
     if (editingId) {
-      const { data, error } = await supabase
-        .from('products')
-        .update(payload)
-        .eq('id', editingId)
-        .select()
-        .single()
-
-      if (error) {
-        console.error('Failed to update product:', error)
-        setImageError('Could not save changes — please try again.')
-      } else {
-        setProducts((prev) => prev.map((p) => (p.id === editingId ? data : p)))
-        resetForm()
-      }
-    } else {
-      const { data, error } = await supabase
-        .from('products')
-        .insert([payload])
-        .select()
-        .single()
-
-      if (error) {
-        console.error('Failed to add product:', error)
-        setImageError('Could not add product — please try again.')
-      } else {
-        setProducts((prev) => [...prev, data])
-        resetForm()
-      }
+      // Don't save yet — show a review of what changed and wait for confirmation.
+      const changes = buildChanges(originalProduct || {}, payload)
+      setPendingUpdate({ payload, changes })
+      return
     }
 
+    setSaving(true)
+    const { data, error } = await supabase
+      .from('products')
+      .insert([payload])
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Failed to add product:', error)
+      setImageError('Could not add product — please try again.')
+    } else {
+      setProducts((prev) => [...prev, data])
+      resetForm()
+    }
     setSaving(false)
+  }
+
+  async function confirmUpdate() {
+    if (!pendingUpdate || !editingId) return
+    setSaving(true)
+
+    const { data, error } = await supabase
+      .from('products')
+      .update(pendingUpdate.payload)
+      .eq('id', editingId)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Failed to update product:', error)
+      setImageError('Could not save changes — please try again.')
+    } else {
+      setProducts((prev) => prev.map((p) => (p.id === editingId ? data : p)))
+      resetForm()
+    }
+    setSaving(false)
+  }
+
+  function cancelReview() {
+    setPendingUpdate(null)
   }
 
   function handleEdit(product) {
     setEditingId(product.id)
+    setOriginalProduct(product)
+    setPendingUpdate(null)
     setImageError('')
     setDraft({
       name: product.name,
@@ -161,7 +235,9 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
       description: product.description || '',
       features: (product.features || []).join('\n'),
       usage: product.usage || '',
-      attributes: product.attributes || {}
+      attributes: product.attributes || {},
+      sku: product.sku || '',
+      salePrice: product.sale_price ? String(product.sale_price) : ''
     })
     setOpenSections((prev) => ({ ...prev, product: true }))
   }
@@ -514,6 +590,28 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
                     )
                   })()}
 
+                  <div className="admin-form-wide sku-sale-row">
+                    <label>
+                      SKU
+                      <input
+                        type="text"
+                        value={draft.sku || ''}
+                        onChange={(e) => setDraft({ ...draft, sku: e.target.value })}
+                        placeholder="e.g. SF-PER-001"
+                      />
+                    </label>
+                    <label>
+                      Sale price (Rs.) — optional
+                      <input
+                        type="number"
+                        min="0"
+                        value={draft.salePrice || ''}
+                        onChange={(e) => setDraft({ ...draft, salePrice: e.target.value })}
+                        placeholder="Leave blank if not on sale"
+                      />
+                    </label>
+                  </div>
+
                   <div className="admin-form-wide">
                     <span className="variants-label">Variants — size and price (at least one required)</span>
                     {(draft.variants || []).map((v, i) => (
@@ -616,7 +714,7 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
 
                   <div className="admin-form-actions">
                     <button type="submit" className="btn btn-solid" disabled={saving || uploading}>
-                      {saving ? 'Saving…' : editingId ? 'Save changes' : 'Add product'}
+                      {saving ? 'Saving…' : editingId ? 'Review changes' : 'Add product'}
                     </button>
                     {editingId && (
                       <button type="button" className="btn btn-line" onClick={resetForm}>
@@ -625,6 +723,34 @@ export default function Admin({ products, setProducts, settings, setSettings }) 
                     )}
                   </div>
                 </form>
+
+                {pendingUpdate && (
+                  <div className="admin-review-panel">
+                    <h3>Review changes</h3>
+                    {pendingUpdate.changes.length === 0 ? (
+                      <p className="muted">No changes detected.</p>
+                    ) : (
+                      <ul className="admin-review-list">
+                        {pendingUpdate.changes.map((c, i) => (
+                          <li key={i}>
+                            <strong>{c.label}</strong>
+                            <span className="admin-review-from">{c.from}</span>
+                            <span className="admin-review-arrow">→</span>
+                            <span className="admin-review-to">{c.to}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    <div className="admin-form-actions">
+                      <button type="button" className="btn btn-solid" onClick={confirmUpdate} disabled={saving}>
+                        {saving ? 'Updating…' : 'Update product'}
+                      </button>
+                      <button type="button" className="btn btn-line" onClick={cancelReview}>
+                        Back to edit
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </section>
