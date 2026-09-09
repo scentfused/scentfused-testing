@@ -40,7 +40,16 @@ export default function ProductCard({ product, badge }) {
         <p className="note">{product.note}</p>
       </Link>
       <div className="row">
-        <span className="price">Rs. {Number(product.price).toLocaleString()}</span>
+        <span className="price">
+          {product.sale_price ? (
+            <>
+              <span className="price-was">Rs. {Number(product.price).toLocaleString()}</span>
+              <span className="price-sale">Rs. {Number(product.sale_price).toLocaleString()}</span>
+            </>
+          ) : (
+            <>Rs. {Number(product.price).toLocaleString()}</>
+          )}
+        </span>
         <button className="add" onClick={handleAdd}>Add</button>
       </div>
     </div>
