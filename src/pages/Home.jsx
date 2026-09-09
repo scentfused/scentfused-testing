@@ -7,9 +7,9 @@ import Icon from '../components/Icon.jsx'
 import { CATEGORIES, latestNames } from '../data/catalog.js'
 
 export default function Home({ products, settings }) {
-  const latest = latestNames
-    .map((name) => products.find((p) => p.name === name))
-    .filter(Boolean)
+  const latest = (settings.carouselProductIds && settings.carouselProductIds.length > 0)
+    ? settings.carouselProductIds.map((id) => products.find((p) => p.id === id)).filter(Boolean)
+    : latestNames.map((name) => products.find((p) => p.name === name)).filter(Boolean)
 
   return (
     <div>
