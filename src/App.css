@@ -623,3 +623,47 @@ footer{border-top:1px solid var(--hairline);padding:70px 0 30px;}
 
 .section-head-center{text-align:center;}
 .related-products{border-top:1px solid var(--hairline);}
+
+/* ---------- Product detail page (full, consolidated) ---------- */
+.product-page{
+  display:flex;gap:48px;max-width:var(--max);margin:0 auto;padding:48px 32px;
+}
+.product-page-image{
+  width:45%;flex-shrink:0;background:#111;display:flex;align-items:center;
+  justify-content:center;min-height:420px;
+}
+.product-page-image img{width:100%;height:100%;object-fit:cover;}
+.product-page-info{flex:1;min-width:0;}
+.product-page-category{
+  font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px;
+}
+.product-page-info h1{margin-top:0;font-size:32px;}
+.product-page-price{font-size:22px;margin:8px 0 16px;color:var(--gold-bright);}
+.product-page-add{width:100%;max-width:320px;margin-top:8px;}
+.product-not-found{max-width:600px;margin:80px auto;text-align:center;padding:0 32px;}
+
+.product-page-tagline{color:var(--gold-dim);font-style:italic;margin:0 0 16px;}
+.product-page-description{color:var(--champagne);line-height:1.8;margin:0 0 24px;}
+
+.product-page-flat-section{margin-bottom:24px;}
+.product-page-flat-section h3{
+  font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px;
+}
+.product-page-detail-line{margin:0 0 4px;font-size:14px;color:var(--champagne);}
+.product-page-detail-line strong{color:var(--gold-dim);font-weight:normal;}
+.product-page-features{margin:0;padding-left:20px;color:var(--champagne);}
+.product-page-features li{margin-bottom:6px;}
+
+.product-page-meta-line{font-size:14px;color:var(--champagne);margin:0 0 10px;}
+.product-page-meta-line strong{color:var(--gold-dim);font-weight:normal;}
+
+.product-page-buy-row{display:flex;align-items:center;gap:16px;margin:24px 0 0;flex-wrap:wrap;}
+.product-page-buy-row .product-page-add{width:auto;flex:1;min-width:200px;margin-top:0;}
+
+.section-head-center{text-align:center;}
+.related-products{border-top:1px solid var(--hairline);}
+
+@media (max-width:760px){
+  .product-page{flex-direction:column;padding:24px 16px;gap:24px;}
+  .product-page-image{width:100%;min-height:320px;}
+}
