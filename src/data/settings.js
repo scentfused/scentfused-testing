@@ -29,5 +29,6 @@ export const defaultSettings = {
   accentColor: '#d4af37',
   showNewBadge: true,
   carouselAutoplay: true,
-  heroImage: ''
+  heroImage: '',
+  carouselProductIds: []
 }
