@@ -36,7 +36,7 @@ export default function Nav() {
 
         <div className="nav-right">
           <button className="cart-btn" aria-label={`Cart, ${cartCount} items`} onClick={() => setIsCartOpen(true)}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
               <circle cx="9" cy="21" r="1" />
               <circle cx="19" cy="21" r="1" />
               <path d="M2.5 3h2l2.4 12.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6" />
