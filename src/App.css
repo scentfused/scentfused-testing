@@ -542,7 +542,7 @@ footer{border-top:1px solid var(--hairline);padding:32px 0 20px;}
 .quickview-info h3{margin-top:0;font-weight:700;}
 .quickview-info .price{font-size:18px;margin:12px 0;font-weight:700;}
 .quickview-variants{margin:16px 0;}
-.quickview-variants-label{display:block;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px;}
+.quickview-variants-label{display:block;font-size:20px;letter-spacing:1px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px;font-weight:700;}
 .quickview-variant-options{display:flex;flex-wrap:wrap;gap:8px;}
 .variant-chip{
   padding:8px 14px;border:1px solid var(--hairline);background:none;
@@ -668,12 +668,12 @@ footer{border-top:1px solid var(--hairline);padding:32px 0 20px;}
 .season-occasion-col label{margin:0;}
 
 /* ---------- Product page: flat sections, Sahare-style layout ---------- */
-.product-page-tagline{color:var(--gold-dim);font-style:italic;margin:0 0 16px;}
+.product-page-tagline{color:var(--gold-dim);font-style:italic;margin:0 0 16px;font-size:20px;font-weight:700;}
 .product-page-description{color:var(--champagne);line-height:1.8;margin:0 0 24px;}
 
 .product-page-flat-section{margin-bottom:24px;}
 .product-page-flat-section h3{
-  font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px;
+  font-size:22px;letter-spacing:1px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px;font-weight:700;
 }
 .product-page-detail-line{margin:0 0 4px;font-size:14px;color:var(--champagne);}
 .product-page-detail-line strong{color:var(--gold-dim);font-weight:normal;}
