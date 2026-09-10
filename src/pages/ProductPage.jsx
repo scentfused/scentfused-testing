@@ -66,8 +66,10 @@ export default function ProductPage({ products }) {
           <p className="product-page-price">
             {showSale ? (
               <>
+              <span className="price-stack">
                 <span className="price-was">Rs. {Number(displayPrice).toLocaleString()}</span>
                 <span className="price-sale">Rs. {Number(product.sale_price).toLocaleString()}</span>
+              </span>
               </>
             ) : (
               <>Rs. {Number(displayPrice).toLocaleString()}</>
