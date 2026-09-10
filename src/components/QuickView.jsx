@@ -13,6 +13,7 @@ export default function QuickView() {
   const variants = product.variants || []
   const activeVariant = selectedVariant || variants[0] || null
   const displayPrice = activeVariant ? activeVariant.price : product.price
+  const showSale = Boolean(product.sale_price) && displayPrice === product.price
 
   function close() {
     setQuickViewProduct(null)
@@ -37,7 +38,18 @@ export default function QuickView() {
         <div className="quickview-info">
           <h3>{product.name}</h3>
           <p className="note">{product.note}</p>
-          <p className="price">Rs. {Number(displayPrice).toLocaleString()}</p>
+          <p className="price">
+            {showSale ? (
+              <>
+              <span className="price-stack">
+                <span className="price-was">Rs. {Number(displayPrice).toLocaleString()}</span>
+                <span className="price-sale">Rs. {Number(product.sale_price).toLocaleString()}</span>
+              </span>
+              </>
+            ) : (
+              <>Rs. {Number(displayPrice).toLocaleString()}</>
+            )}
+          </p>
 
           {variants.length > 0 && (
             <div className="quickview-variants">
