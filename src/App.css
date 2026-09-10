@@ -668,7 +668,7 @@ footer{border-top:1px solid var(--hairline);padding:32px 0 20px;}
 .season-occasion-col label{margin:0;}
 
 /* ---------- Product page: flat sections, Sahare-style layout ---------- */
-.product-page-tagline{color:var(--gold-bright);font-style:normal;margin:0 0 16px;font-size:40px;letter-spacing:3px;text-transform:uppercase;font-family:'Robot Monster', sans-serif;}
+.product-page-tagline{color:var(--gold-bright);font-style:normal;margin:0 0 16px;font-size:30px;letter-spacing:2.5px;text-transform:uppercase;font-family:'Robot Monster', sans-serif;}
 .product-page-description{color:var(--champagne);line-height:1.8;margin:0 0 24px;}
 
 .product-page-flat-section{margin-bottom:24px;}
