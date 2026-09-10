@@ -3,7 +3,7 @@ export default function Footer() {
     <footer>
       <div className="wrap">
         <div className="footer-grid">
-          <div className="footer-brand">
+          <div className="footer-brand footer-row">
             <span className="brand">scentfused</span>
             <p>A curated house of perfumes, attars, bodycare and candles, for every skin and every story.</p>
             <form className="newsletter" onSubmit={(e) => e.preventDefault()}>
@@ -11,7 +11,7 @@ export default function Footer() {
               <button type="submit">Join</button>
             </form>
           </div>
-          <div>
+          <div className="footer-row">
             <h4>Shop</h4>
             <ul>
               <li><a href="#perfumes">Perfumes</a></li>
@@ -20,7 +20,7 @@ export default function Footer() {
               <li><a href="#candles">Candles</a></li>
             </ul>
           </div>
-          <div>
+          <div className="footer-row">
             <h4>Help</h4>
             <ul>
               <li><a href="#">Shipping</a></li>
@@ -29,7 +29,7 @@ export default function Footer() {
               <li><a href="#">Contact us</a></li>
             </ul>
           </div>
-          <div>
+          <div className="footer-row">
             <h4>Follow</h4>
             <ul>
               <li><a href="#">Instagram</a></li>
