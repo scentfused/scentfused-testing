@@ -8,12 +8,7 @@
   --champagne:#cbb98a;
   --max:1240px;
 }
-@font-face {
-  font-family: 'Robot Monster';
-  src: url('/fonts/RobotMonster.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
+
 
 @font-face {
   font-family: 'Orange Avenue';
